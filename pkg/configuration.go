@@ -1,7 +1,11 @@
 package utility
 
 import (
-	sl "github.com/tdrip/logger/pkg"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
+	"os"
 )
 
 //Configuration this class represents a simple Utility Configuration
@@ -11,7 +15,10 @@ type Configuration struct {
 
 //NewConfiguration Creates a new configuration
 func NewConfiguration() *Configuration {
-
+	conf := Configuration{}
+	DataMap := make(map[string][]string)
+	conf.Data = DataMap
+	return &conf
 }
 
 func fileExists(filename string) bool {

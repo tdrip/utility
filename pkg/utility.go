@@ -11,14 +11,14 @@ type Utility struct {
 	displayname string
 	version     string
 	productcode string
-	conffile string
+	conffile    string
 
 	Configuration *Configuration
 }
 
 //NewUtility Creates a new applcation
 func NewUtility(productcode string, displayname string, version string, conffile string) *Utility {
-	app := Utility{ productcode: productcode, version: version, displayname: displayname, conffile:conffile }
+	app := Utility{productcode: productcode, version: version, displayname: displayname, conffile: conffile}
 	return &app
 }
 
@@ -40,7 +40,7 @@ func (app *Utility) GetProductCode() string {
 //LoadConf load utiliity configuration
 func (app *Utility) LoadConf() error {
 
-	if len(app.conffile) >0 {
+	if len(app.conffile) > 0 {
 		conf, err := LoadConfig(app.conffile)
 		if err != nil {
 			return err
@@ -56,10 +56,8 @@ func (app *Utility) LoadConf() error {
 func (app *Utility) SaveConf() error {
 
 	// check we have a file path and data otherwise error
-	if len(app.conffile) > 0 &&  app.Configuration != nil{
-		return SaveConf(app.Configuration)s
+	if len(app.conffile) > 0 && app.Configuration != nil {
+		return SaveConfig(app.conffile, app.Configuration)
 	}
-
 	return nil
 }
-

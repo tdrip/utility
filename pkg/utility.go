@@ -1,7 +1,7 @@
 package utility
 
 import (
-	sl "github.com/tdrip/logger/pkg
+	sl "github.com/tdrip/logger/pkg"
 )
 
 //Utility this class represents a simple Utility
@@ -17,8 +17,8 @@ type Utility struct {
 }
 
 //NewUtility Creates a new applcation
-func NewUtility(productcode string, displayname string, version string,conffile string) *Utility {
-	app := Utility{productcode: productcode, version: version, displayname: displayname,conffile:conffile}
+func NewUtility(productcode string, displayname string, version string, conffile string) *Utility {
+	app := Utility{ productcode: productcode, version: version, displayname: displayname, conffile:conffile }
 	return &app
 }
 

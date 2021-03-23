@@ -86,7 +86,7 @@ func (app *Utility) AddShutdownItem(item *ActionItem) {
 func (app *Utility) Startup() error {
 
 	for _, startup := range app.StartupItems {
-		err := startup.DoCheck(app)
+		err := startup.DoChecks(app)
 		if err != nil {
 			return err
 		}
@@ -98,7 +98,7 @@ func (app *Utility) Startup() error {
 func (app *Utility) Shutdown() error {
 
 	for _, startup := range app.ShutdownItems {
-		err := startup.DoCheck(app)
+		err := startup.DoChecks(app)
 		if err != nil {
 			return err
 		}

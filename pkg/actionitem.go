@@ -4,7 +4,7 @@ package utility
 type ActionItem struct {
 }
 
-//DoCheck - does tshe Checks to make sure the app is operation
-func (item *ActionItem) DoCheck(app *Utility) error {
+//DoChecks does the Checks to make sure the app is operation
+func (item *ActionItem) DoChecks(app *Utility) error {
 	return nil
 }

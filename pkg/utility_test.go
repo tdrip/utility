@@ -13,16 +13,21 @@ func TestNewUtility(t *testing.T) {
 	conffile := "./dumb.json"
 
 	util := NewUtility(displayname, version, conffile)
+
 	util.Configuration.Data["homealone"] = []string{"i'll", "give", "ya", "till", "the", "count", "of", "ten", "1", "2", "..", "10", "haha"}
+
 	err := util.SaveConf()
+
 	if err != nil {
 		t.Errorf("'%s' - no err should be returned", err)
 	}
 
 	failai := TestActionItem{Fail: true, CrazyLookup: "Banana"}
 
-	util.AddItem("test", IActionItem(&failai))
+	// add utility item
+	util = AddUtilityItem(util, "test", IActionItem(&failai))
 
+	// start up utility
 	err = util.Startup()
 
 	if err == nil {
@@ -33,6 +38,13 @@ func TestNewUtility(t *testing.T) {
 	tai := item.(*TestActionItem)
 	if len(tai.CrazyLookup) == 0 {
 		t.Errorf("'%s' - CrazyLookup should be returned", tai.CrazyLookup)
+	}
+
+	// shutdown up utility
+	err = util.Shutdown()
+
+	if err != nil {
+		t.Errorf("'%s' - err should be returned", err.Error())
 	}
 }
 

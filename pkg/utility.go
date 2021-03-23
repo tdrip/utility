@@ -19,34 +19,34 @@ type Utility struct {
 
 //NewUtility Creates a new utility applcation
 func NewUtility(displayname string, version string, conffile string) *Utility {
-	app := Utility{version: version, displayname: displayname, conffile: conffile}
-	app.Configuration = NewConfiguration()
+	util := Utility{version: version, displayname: displayname, conffile: conffile}
+	util.Configuration = NewConfiguration()
 
 	items := make(map[string]IActionItem)
-	app.Items = items
+	util.Items = items
 
-	return &app
+	return &util
 }
 
 //GetVersion returns the version of the application
-func (app *Utility) GetVersion() string {
-	return app.version
+func (util *Utility) GetVersion() string {
+	return util.version
 }
 
 //GetDisplayname returns the displayname for the application
-func (app *Utility) GetDisplayname() string {
-	return app.displayname
+func (util *Utility) GetDisplayname() string {
+	return util.displayname
 }
 
 //LoadConf load utiliity configuration
-func (app *Utility) LoadConf() error {
+func (util *Utility) LoadConf() error {
 
-	if len(app.conffile) > 0 {
-		conf, err := LoadConfig(app.conffile)
+	if len(util.conffile) > 0 {
+		conf, err := LoadConfig(util.conffile)
 		if err != nil {
 			return err
 		} else {
-			app.Configuration = conf
+			util.Configuration = conf
 		}
 	}
 
@@ -54,30 +54,30 @@ func (app *Utility) LoadConf() error {
 }
 
 //SaveConf save utiliity configuration
-func (app *Utility) SaveConf() error {
+func (util *Utility) SaveConf() error {
 
 	// check we have a file path and data otherwise error
-	if len(app.conffile) > 0 && app.Configuration != nil {
-		return SaveConfig(app.conffile, app.Configuration)
+	if len(util.conffile) > 0 && util.Configuration != nil {
+		return SaveConfig(util.conffile, util.Configuration)
 	}
 	return nil
 }
 
 //AddItem add startup item
-func (app *Utility) AddItem(key string, item IActionItem) {
-	data := app.Items
+func (util *Utility) AddItem(key string, item IActionItem) {
+	data := util.Items
 	data[key] = item
-	app.Items = data
+	util.Items = data
 }
 
 //Startup save utiliity configuration
-func (app *Utility) Startup() error {
+func (util *Utility) Startup() error {
 
-	for key, startup := range app.Items {
-		app.LogDebug("Startup", key)
-		err := startup.DoStartupChecks(app)
+	for key, startup := range util.Items {
+		util.LogDebug("Startup", key)
+		err := startup.DoStartupChecks(util)
 		if err != nil {
-			app.LogErrorE("Startup", err)
+			util.LogErrorE("Startup", err)
 			return err
 		}
 	}
@@ -85,15 +85,21 @@ func (app *Utility) Startup() error {
 }
 
 //Shutdown do tasks on shutdown
-func (app *Utility) Shutdown() error {
+func (util *Utility) Shutdown() error {
 
-	for key, startup := range app.Items {
-		app.LogDebug("Shutdown", key)
-		err := startup.DoShutdownChecks(app)
+	for key, startup := range util.Items {
+		util.LogDebug("Shutdown", key)
+		err := startup.DoShutdownChecks(util)
 		if err != nil {
-			app.LogErrorE("Shutdown", err)
+			util.LogErrorE("Shutdown", err)
 			return err
 		}
 	}
 	return nil
+}
+
+//AddItem utility and key, item
+func AddUtilityItem(util *Utility, key string, item IActionItem) *Utility {
+	util.AddItem(key, item)
+	return util
 }

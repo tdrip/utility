@@ -21,7 +21,7 @@ func TestNewUtility(t *testing.T) {
 
 	failai := TestActionItem{Fail: true, CrazyLookup: "Banana"}
 
-	util.AddStartupItem("test", IActionItem(&failai))
+	util.AddItem("test", IActionItem(&failai))
 
 	err = util.Startup()
 
@@ -29,7 +29,7 @@ func TestNewUtility(t *testing.T) {
 		t.Errorf("'%s' - err should be returned", "TestActionItem")
 	}
 
-	item := util.StartupItems["test"]
+	item := util.Items["test"]
 	tai := item.(*TestActionItem)
 	if len(tai.CrazyLookup) == 0 {
 		t.Errorf("'%s' - CrazyLookup should be returned", tai.CrazyLookup)
@@ -43,9 +43,9 @@ type TestActionItem struct {
 }
 
 //Checks - does the Checks to make sure the app is operation
-func (item *TestActionItem) DoChecks(app *Utility) error {
+func (item *TestActionItem) DoStartupChecks(app *Utility) error {
 
-	fmt.Println("Doing TestActionItem checks")
+	fmt.Println("Doing TestActionItem StartupChecks")
 
 	if item.Fail {
 		return errors.New("This should fail")

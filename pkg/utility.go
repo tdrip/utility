@@ -14,16 +14,21 @@ type Utility struct {
 
 	Configuration *Configuration
 
-	StartupItems  []IActionItem
-	ShutdownItems []IActionItem
+	StartupItems  map[string]IActionItem
+	ShutdownItems map[string]IActionItem
 }
 
 //NewUtility Creates a new applcation
 func NewUtility(displayname string, version string, conffile string) *Utility {
 	app := Utility{version: version, displayname: displayname, conffile: conffile}
 	app.Configuration = NewConfiguration()
-	app.StartupItems = []IActionItem{}
-	app.ShutdownItems = []IActionItem{}
+
+	startupItems := make(map[string]IActionItem)
+	app.StartupItems = startupItems
+
+	shutdownItems := make(map[string]IActionItem)
+	app.ShutdownItems = shutdownItems
+
 	return &app
 }
 
@@ -63,23 +68,21 @@ func (app *Utility) SaveConf() error {
 }
 
 //AddStartupItem add startup item
-func (app *Utility) AddStartupItem(item IActionItem) {
-	items := app.StartupItems
-	items = append(items, item)
-	app.StartupItems = items
+func (app *Utility) AddStartupItem(key string, item IActionItem) {
+	app.StartupItems[key] = item
 }
 
 //AddShutdownItem add shutdown item
-func (app *Utility) AddShutdownItem(item IActionItem) {
-	items := app.ShutdownItems
-	items = append(items, item)
-	app.ShutdownItems = items
+func (app *Utility) AddShutdownItem(key string, item IActionItem) {
+	app.ShutdownItems[key] = item
+
 }
 
 //Startup save utiliity configuration
 func (app *Utility) Startup() error {
 
-	for _, startup := range app.StartupItems {
+	for key, startup := range app.StartupItems {
+		app.LogDebug("Startup", key)
 		err := startup.DoChecks(app)
 		if err != nil {
 			return err
@@ -91,7 +94,8 @@ func (app *Utility) Startup() error {
 //Shutdown do tasks on shutdown
 func (app *Utility) Shutdown() error {
 
-	for _, startup := range app.ShutdownItems {
+	for key, startup := range app.ShutdownItems {
+		app.LogDebug("Shutdown", key)
 		err := startup.DoChecks(app)
 		if err != nil {
 			return err

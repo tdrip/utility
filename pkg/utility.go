@@ -10,7 +10,6 @@ type Utility struct {
 
 	displayname string
 	version     string
-	productcode string
 	conffile    string
 
 	Configuration *Configuration
@@ -20,8 +19,8 @@ type Utility struct {
 }
 
 //NewUtility Creates a new applcation
-func NewUtility(productcode string, displayname string, version string, conffile string) *Utility {
-	app := Utility{productcode: productcode, version: version, displayname: displayname, conffile: conffile}
+func NewUtility(displayname string, version string, conffile string) *Utility {
+	app := Utility{version: version, displayname: displayname, conffile: conffile}
 	app.Configuration = NewConfiguration()
 	app.StartupItems = []IActionItem{}
 	app.ShutdownItems = []IActionItem{}
@@ -36,11 +35,6 @@ func (app *Utility) GetVersion() string {
 //GetDisplayname returns the displayname for the application
 func (app *Utility) GetDisplayname() string {
 	return app.displayname
-}
-
-//GetProductCode gets the product code
-func (app *Utility) GetProductCode() string {
-	return app.productcode
 }
 
 //LoadConf load utiliity configuration

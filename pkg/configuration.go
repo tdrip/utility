@@ -81,7 +81,11 @@ func SaveConfig(path string, data *Configuration) error {
 			return fmt.Errorf("saving %s failed with %s", path, err.Error())
 		}
 	} else {
-		return fmt.Errorf("'%s' already exists to save", path)
+		e := os.Remove(path)
+		if e == nil {
+			return SaveConfig(path, data)
+		}
+		return fmt.Errorf("'%s' already exists so tried to delete however an error occurred: %s", path, e.Error())
 	}
 
 	return nil

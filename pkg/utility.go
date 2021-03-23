@@ -15,16 +15,16 @@ type Utility struct {
 
 	Configuration *Configuration
 
-	StartupItems  []*ActionItem
-	ShutdownItems []*ActionItem
+	StartupItems  []IActionItem
+	ShutdownItems []IActionItem
 }
 
 //NewUtility Creates a new applcation
 func NewUtility(productcode string, displayname string, version string, conffile string) *Utility {
 	app := Utility{productcode: productcode, version: version, displayname: displayname, conffile: conffile}
 	app.Configuration = NewConfiguration()
-	app.StartupItems = []*ActionItem{}
-	app.ShutdownItems = []*ActionItem{}
+	app.StartupItems = []IActionItem{}
+	app.ShutdownItems = []IActionItem{}
 	return &app
 }
 
@@ -69,14 +69,14 @@ func (app *Utility) SaveConf() error {
 }
 
 //AddStartupItem add startup item
-func (app *Utility) AddStartupItem(item *ActionItem) {
+func (app *Utility) AddStartupItem(item IActionItem) {
 	items := app.StartupItems
 	items = append(items, item)
 	app.StartupItems = items
 }
 
 //AddShutdownItem add shutdown item
-func (app *Utility) AddShutdownItem(item *ActionItem) {
+func (app *Utility) AddShutdownItem(item IActionItem) {
 	items := app.ShutdownItems
 	items = append(items, item)
 	app.ShutdownItems = items

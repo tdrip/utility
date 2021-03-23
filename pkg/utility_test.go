@@ -1,6 +1,8 @@
 package utility
 
 import (
+	"errors"
+	"fmt"
 	"testing"
 )
 
@@ -17,4 +19,33 @@ func TestNewUtility(t *testing.T) {
 	if err != nil {
 		t.Errorf("'%s' - no err should be returned", err)
 	}
+
+	failai := TestActionItem{Fail: true}
+
+	util.AddStartupItem(IActionItem(&failai))
+
+	err = util.Startup()
+
+	if err == nil {
+		t.Errorf("'%s' - err should be returned", "TestActionItem")
+	}
+
+}
+
+type TestActionItem struct {
+	*ActionItem
+	Fail bool
+}
+
+//Checks - does the Checks to make sure the app is operation
+func (item *TestActionItem) DoChecks(app *Utility) error {
+
+	fmt.Println("Doing TestActionItem checks")
+
+	if item.Fail {
+		return errors.New("This should fail")
+	} else {
+		return nil
+	}
+
 }

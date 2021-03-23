@@ -14,12 +14,17 @@ type Utility struct {
 	conffile    string
 
 	Configuration *Configuration
+
+	StartupItems  []*ActionItem
+	ShutdownItems []*ActionItem
 }
 
 //NewUtility Creates a new applcation
 func NewUtility(productcode string, displayname string, version string, conffile string) *Utility {
 	app := Utility{productcode: productcode, version: version, displayname: displayname, conffile: conffile}
 	app.Configuration = NewConfiguration()
+	app.StartupItems = []*ActionItem{}
+	app.ShutdownItems = []*ActionItem{}
 	return &app
 }
 
@@ -59,6 +64,44 @@ func (app *Utility) SaveConf() error {
 	// check we have a file path and data otherwise error
 	if len(app.conffile) > 0 && app.Configuration != nil {
 		return SaveConfig(app.conffile, app.Configuration)
+	}
+	return nil
+}
+
+//AddStartupItem add startup item
+func (app *Utility) AddStartupItem(item *ActionItem) {
+	items := app.StartupItems
+	items = append(items, item)
+	app.StartupItems = items
+}
+
+//AddShutdownItem add shutdown item
+func (app *Utility) AddShutdownItem(item *ActionItem) {
+	items := app.ShutdownItems
+	items = append(items, item)
+	app.ShutdownItems = items
+}
+
+//Startup save utiliity configuration
+func (app *Utility) Startup() error {
+
+	for _, startup := range app.StartupItems {
+		err := startup.DoCheck(app)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+//Shutdown do tasks on shutdown
+func (app *Utility) Shutdown() error {
+
+	for _, startup := range app.ShutdownItems {
+		err := startup.DoCheck(app)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

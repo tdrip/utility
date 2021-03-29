@@ -101,6 +101,9 @@ func (util *Utility) Shutdown() error {
 		}
 	}
 
+	// flush the reports before closing
+	util.FlushRecords()
+
 	// close reports
 	for _, sud := range util.Reports {
 		if sud.File != nil {

@@ -48,6 +48,26 @@ func TestNewUtility(t *testing.T) {
 	}
 }
 
+func TestReport(t *testing.T) {
+	displayname := "fantastic product"
+	version := "0.0.0.0"
+	conffile := "./dumb.json"
+
+	util := NewUtility(displayname, version, conffile)
+	err := util.WriteRecord("failed report", []string{"a", "b", "c"})
+	if err == nil {
+		t.Errorf("err should be returned")
+	}
+
+	util.AddCustomReport("failed report")
+	err = util.WriteRecord("failed report", []string{"a", "b", "c"})
+	if err != nil {
+		t.Errorf("'%s' - err should not  be returned", err.Error())
+	}
+
+	util.Shutdown()
+}
+
 type TestActionItem struct {
 	*ActionItem
 	Fail        bool

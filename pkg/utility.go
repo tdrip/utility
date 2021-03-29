@@ -1,6 +1,8 @@
 package utility
 
 import (
+	"fmt"
+
 	sl "github.com/tdrip/logger/pkg"
 )
 
@@ -132,7 +134,11 @@ func AddUtilityItem(util *Utility, key string, item IActionItem) *Utility {
 // WriteRecord to report
 func (util *Utility) WriteRecord(name string, record []string) error {
 	report := util.Reports[name]
-	return report.WriteRecord(record)
+	if report != nil {
+		return report.WriteRecord(record)
+	}
+
+	return fmt.Errorf("%s does not have an asssociated report", name)
 }
 
 // Add a custom report to the tool

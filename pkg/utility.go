@@ -14,6 +14,8 @@ type Utility struct {
 
 	Configuration *Configuration
 
+	Reports map[string]*Report
+
 	Items map[string]IActionItem
 }
 
@@ -24,6 +26,9 @@ func NewUtility(displayname string, version string, conffile string) *Utility {
 
 	items := make(map[string]IActionItem)
 	util.Items = items
+
+	reports := make(map[string]*Report)
+	util.Reports = reports
 
 	return &util
 }
@@ -95,6 +100,14 @@ func (util *Utility) Shutdown() error {
 			return err
 		}
 	}
+
+	// close reports
+	for _, sud := range util.Reports {
+		if sud.File != nil {
+			sud.File.Close()
+		}
+	}
+
 	return nil
 }
 
@@ -102,4 +115,23 @@ func (util *Utility) Shutdown() error {
 func AddUtilityItem(util *Utility, key string, item IActionItem) *Utility {
 	util.AddItem(key, item)
 	return util
+}
+
+// WriteRecord to report
+func (util *Utility) WriteRecord(name string, record []string) error {
+	report := util.Reports[name]
+	return report.WriteRecord(record)
+}
+
+// Add a custom report to the tool
+func (util *Utility) AddCustomReport(name string) error {
+
+	rep, err := CreateReport(name)
+	if err != nil {
+		return err
+	}
+
+	util.Reports[name] = rep
+
+	return nil
 }

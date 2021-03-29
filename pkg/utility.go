@@ -111,6 +111,15 @@ func (util *Utility) Shutdown() error {
 	return nil
 }
 
+func (util *Utility) FlushRecords() {
+
+	for _, sud := range util.Reports {
+		if sud.Writer != nil {
+			sud.Writer.Flush()
+		}
+	}
+}
+
 //AddItem utility and key, item
 func AddUtilityItem(util *Utility, key string, item IActionItem) *Utility {
 	util.AddItem(key, item)

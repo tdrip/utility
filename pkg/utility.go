@@ -6,7 +6,7 @@ import (
 	sl "github.com/tdrip/logger/pkg"
 )
 
-//Utility this class represents a simple Utility
+//Utility this structure represents a simple Utility
 type Utility struct {
 	sl.AppLogger
 
@@ -22,7 +22,7 @@ type Utility struct {
 }
 
 //NewUtility Creates a new utility applcation
-func NewUtility(displayname string, version string, conffile string) *Utility {
+func NewUtility(displayname string, version string, conffile string) Utility {
 	util := Utility{version: version, displayname: displayname, conffile: conffile}
 	util.Configuration = NewConfiguration()
 
@@ -32,21 +32,21 @@ func NewUtility(displayname string, version string, conffile string) *Utility {
 	reports := make(map[string]*Report)
 	util.Reports = reports
 
-	return &util
+	return util
 }
 
 //GetVersion returns the version of the application
-func (util *Utility) GetVersion() string {
+func (util Utility) GetVersion() string {
 	return util.version
 }
 
 //GetDisplayname returns the displayname for the application
-func (util *Utility) GetDisplayname() string {
+func (util Utility) GetDisplayname() string {
 	return util.displayname
 }
 
 //LoadConf load utiliity configuration
-func (util *Utility) LoadConf() error {
+func (util Utility) LoadConf() error {
 
 	if len(util.conffile) > 0 {
 		conf, err := LoadConfig(util.conffile)
@@ -61,7 +61,7 @@ func (util *Utility) LoadConf() error {
 }
 
 //SaveConf save utiliity configuration
-func (util *Utility) SaveConf() error {
+func (util Utility) SaveConf() error {
 
 	// check we have a file path and data otherwise error
 	if len(util.conffile) > 0 && util.Configuration != nil {
@@ -71,14 +71,14 @@ func (util *Utility) SaveConf() error {
 }
 
 //AddItem add startup item
-func (util *Utility) AddItem(key string, item IActionItem) {
+func (util Utility) AddItem(key string, item IActionItem) {
 	data := util.Items
 	data[key] = item
 	util.Items = data
 }
 
 //Startup save utiliity configuration
-func (util *Utility) Startup() error {
+func (util Utility) Startup() error {
 
 	for key, startup := range util.Items {
 		util.LogDebug("Startup", key)
@@ -92,7 +92,7 @@ func (util *Utility) Startup() error {
 }
 
 //Shutdown do tasks on shutdown
-func (util *Utility) Shutdown() error {
+func (util Utility) Shutdown() error {
 
 	for key, startup := range util.Items {
 		util.LogDebug("Shutdown", key)
@@ -126,13 +126,13 @@ func (util *Utility) FlushRecords() {
 }
 
 //AddItem utility and key, item
-func AddUtilityItem(util *Utility, key string, item IActionItem) *Utility {
+func AddUtilityItem(util Utility, key string, item IActionItem) Utility {
 	util.AddItem(key, item)
 	return util
 }
 
 // WriteRecord to report
-func (util *Utility) WriteRecord(name string, record []string) error {
+func (util Utility) WriteRecord(name string, record []string) error {
 	report := util.Reports[name]
 	if report != nil {
 		return report.WriteRecord(record)
@@ -142,7 +142,7 @@ func (util *Utility) WriteRecord(name string, record []string) error {
 }
 
 // Add a custom report to the tool
-func (util *Utility) AddCustomReport(name string) error {
+func (util Utility) AddCustomReport(name string) error {
 
 	rep, err := CreateReport(name)
 	if err != nil {

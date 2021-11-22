@@ -1,9 +1,9 @@
 package utility
 
-//ActionItem this class represents a action item to be done at start up or shutdown
+//ActionItem this structure represents a action item to be done at start up or shutdown
 type IActionItem interface {
-	DoStartupChecks(app *Utility) error
-	DoShutdownChecks(app *Utility) error
+	DoStartupChecks(app Utility) error
+	DoShutdownChecks(app Utility) error
 }
 
 type ActionItem struct {
@@ -11,11 +11,11 @@ type ActionItem struct {
 }
 
 //DoStartupChecks does the startup checks to make sure the app is operation
-func (item *ActionItem) DoStartupChecks(app *Utility) error {
+func (item ActionItem) DoStartupChecks(app Utility) error {
 	return nil
 }
 
 //DoShutdownChecks does the shutdown checks to make sure the app is operation
-func (item *ActionItem) DoShutdownChecks(app *Utility) error {
+func (item ActionItem) DoShutdownChecks(app Utility) error {
 	return nil
 }

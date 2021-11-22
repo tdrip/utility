@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-//Configuration this class represents a simple Utility Configuration
+//Configuration this structure represents a simple Utility Configuration
 type Configuration struct {
 	Data map[string][]string `json:"data,omitempty"`
 }
